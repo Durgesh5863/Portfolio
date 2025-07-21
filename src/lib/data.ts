@@ -44,7 +44,6 @@ export type Certification = {
   issuing_organization: string;
   date: string;
   image: string;
-  aiHint: string;
   credential_url?: string;
 };
 
@@ -68,13 +67,13 @@ export type Achievement = {
 };
 
 export const achievements: Achievement[] = [
-  // {
-  //   id: 1,
-  //   title: "First Place, National AI Hackathon",
-  //   issuer: "AI Innovators Society",
-  //   date: "Mar 2024",
-  //   description: "Led a team to develop a novel real-time translation application, winning against 50 other teams."
-  // },
+  {
+    id: 1,
+    title: "Best Paper Award",
+    issuer: "ICRTCET",
+    date: "July 2024",
+    description: "Received the Best Paper Award at International Conference on Recent Trends in Computing and Engineering Technologies (ICRTCET) at Rajarajeswari College of Engineering"
+  },
   // {
   //   id: 2,
   //   title: "Employee of the Quarter",
@@ -247,28 +246,26 @@ export const testimonials: Testimonial[] = [
 export const certifications: Certification[] = [
   {
     id: 1,
-    name: "Google Certified Professional Cloud Architect",
-    issuing_organization: "Google Cloud",
-    date: "Aug 2023",
+    name: "Advanced LLM Agents MOOC",
+    issuing_organization: "University of Berkeley",
+    date: "Spring 2025",
     image: "https://placehold.co/600x400.png",
-    aiHint: "cloud certificate",
-    credential_url: "#",
+    credential_url: "https://drive.google.com/file/d/1iMxQkX3SH-kYMRIidXdCAs6x6EcaZP7B/view?usp=sharing",
   },
   {
     id: 2,
-    name: "Certified Kubernetes Administrator (CKA)",
-    issuing_organization: "The Linux Foundation",
-    date: "May 2022",
+    name: "Hands on Approach to AI for real-world applications",
+    issuing_organization: "IIT Kharagpur and TCS iON",
+    date: "December 2023",
     image: "https://placehold.co/600x400.png",
-    aiHint: "kubernetes certificate",
-    credential_url: "#",
+    credential_url: "https://drive.google.com/file/d/11R5tfHzU0PYXIZnkAxf2ilQhjl4WHPvV/view?usp=sharing",
   },
   {
     id: 3,
-    name: "AWS Certified Solutions Architect – Associate",
-    issuing_organization: "Amazon Web Services",
-    date: "Jul 2021",
+    name: "Data Analytics and Visualization Job Simulation",
+    issuing_organization: "Accenture and Forage",
+    date: "March 2025",
     image: "https://placehold.co/600x400.png",
-    aiHint: "aws certificate",
+    credential_url: "https://drive.google.com/file/d/13NT13EelHDDabmQziQ9IHqu9wi-gvkMG/view?usp=sharing",
   },
 ];
