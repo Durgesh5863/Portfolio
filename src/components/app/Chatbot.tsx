@@ -45,12 +45,13 @@ export default function Chatbot() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000/chat', {
+      // Update the API endpoint to the new location
+      const response = await fetch('/ai/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ question: currentInputValue }),
+        body: JSON.stringify({ message: currentInputValue }), // Use 'message' as the key
       });
 
       if (!response.ok) {
