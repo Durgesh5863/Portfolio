@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/app/ThemeProvider';
+import { CopilotKit } from '@copilotkit/react-core';
 import Chatbot from '@/components/app/Chatbot';
 
 const inter = Inter({
@@ -49,19 +50,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="absolute top-0 left-0 -z-10 h-full w-full bg-background">
-            <div className="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[20%] translate-y-[20%] rounded-full bg-[rgba(25,103,210,0.2)] opacity-50 blur-[80px]"></div>
-          </div>
-          {children}
-          <Toaster />
-          <Chatbot />
-        </ThemeProvider>
+        <CopilotKit runtimeUrl="/api/copilotkit">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="absolute top-0 left-0 -z-10 h-full w-full bg-background">
+              <div className="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[20%] translate-y-[20%] rounded-full bg-[rgba(25,103,210,0.2)] opacity-50 blur-[80px]"></div>
+            </div>
+            {children}
+            <Toaster />
+            <Chatbot />
+          </ThemeProvider>
+        </CopilotKit>
       </body>
     </html>
   );
