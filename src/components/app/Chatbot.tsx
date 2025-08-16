@@ -8,7 +8,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { AnimatePresence, motion } from 'framer-motion';
 
-type Message = {
+// Import useCopilotChat and message types
+import { useCopilotChat } from '@copilotkit/react-core';
+import { TextMessage, MessageRole } from "@copilotkit/runtime-client-gql";
+
+
+// Renamed type alias
+type ChatMessage = {
   id: number;
   text: string;
   sender: 'user' | 'bot';
@@ -16,21 +22,44 @@ type Message = {
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 1, text: "Hello! I'm an AI assistant. How can I help you learn more about Durgesh?", sender: 'bot' },
+  // Use the renamed type alias
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { id: 1, text: "Hello! I'm an AI assistant. How can I help you learn more about Durgesh?남도", sender: 'bot' },
   ]);
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  // Use the useCopilotChat hook, only destructuring available properties
+  const {
+    visibleMessages, // Correct property name from documentation
+    isLoading, // CopilotKit's loading state
+    appendMessage // Function to send messages
+  } = useCopilotChat();
 
   useEffect(() => {
     if (scrollAreaRef.current) {
-        scrollAreaRef.current.scrollTo({
-            top: scrollAreaRef.current.scrollHeight,
-            behavior: 'smooth'
-        });
+      scrollAreaRef.current.scrollTo({
+        top: scrollAreaRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
     }
-  }, [messages]);
+  }, [messages, visibleMessages]); // Include visibleMessages in the dependency array
+
+  useEffect(() => {
+    // Sync CopilotKit's messages with your local messages state
+    // Use the renamed type alias
+    const syncedMessages: ChatMessage[] = visibleMessages.map((msg, index) => ({
+      id: index, // You might want a better ID
+      text: (msg as any).content, // Adjust based on CopilotKit message structure
+      sender: (msg as any).role === 'user' ? 'user' : 'bot', // Adjust based on CopilotKit role
+    }));
+    setMessages([
+      { id: 1, text: "Hello! I'm an AI assistant. How can I help you learn more about Durgesh?남도", sender: 'bot' }, // Keep initial message
+      ...syncedMessages.slice(1) // Add synced messages, excluding the potential initial bot message from copilotMessages
+    ]);
+
+  }, [visibleMessages]); // Sync when visibleMessages changes
+
 
   const toggleChat = () => setIsOpen(!isOpen);
 
@@ -38,45 +67,21 @@ export default function Chatbot() {
     e.preventDefault();
     if (!inputValue.trim() || isLoading) return;
 
-    const userMessage: Message = { id: Date.now(), text: inputValue, sender: 'user' };
+    // Add user message to local state immediately
+    // Use the renamed type alias
+    const userMessage: ChatMessage = { id: Date.now(), text: inputValue, sender: 'user' };
     setMessages((prev) => [...prev, userMessage]);
-    const currentInputValue = inputValue;
+
+    // Use appendMessage from CopilotKit to send the message
+    await appendMessage(
+      new TextMessage({
+        role: MessageRole.User,
+        content: inputValue,
+      }) as any // Type assertion might be needed depending on TextMessage definition
+    );
+
+    // Clear the input after sending
     setInputValue('');
-    setIsLoading(true);
-
-    try {
-      // Update the API endpoint to the new location
-      const response = await fetch('/ai/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: currentInputValue }), // Use 'message' as the key
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const botResponse: Message = { 
-        id: Date.now() + 1, 
-        text: data.answer || "I'm not sure how to respond to that.", 
-        sender: 'bot' 
-      };
-      setMessages((prev) => [...prev, botResponse]);
-
-    } catch (error) {
-      console.error("Failed to fetch chatbot response:", error);
-      const errorResponse: Message = {
-        id: Date.now() + 1,
-        text: "Sorry, I'm having trouble connecting to the backend right now.",
-        sender: 'bot',
-      };
-      setMessages((prev) => [...prev, errorResponse]);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
@@ -104,7 +109,7 @@ export default function Chatbot() {
                 <CardContent className="p-0 flex-1 flex flex-col">
                   <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
                     <div className="space-y-4">
-                      {messages.map((message) => (
+                      {messages.map((message: ChatMessage) => ( // Explicitly type the message parameter
                         <div
                           key={message.id}
                           className={`flex items-end gap-2 ${
@@ -132,6 +137,8 @@ export default function Chatbot() {
                           )}
                         </div>
                       ))}
+
+                      {/* Loading indicator can be based on CopilotKit's isLoading */}
                       {isLoading && (
                         <div className="flex items-center gap-2">
                            <Avatar className="h-8 w-8">
@@ -148,8 +155,8 @@ export default function Chatbot() {
                     <form onSubmit={handleSendMessage} className="flex gap-2">
                       <Input
                         value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="Ask a question..."
+                        onChange={(e) => setInputValue(e.target.value)} // Keep your input state handler
+                        placeholder="Ask a question...남도"
                         autoComplete="off"
                         disabled={isLoading}
                       />
@@ -164,7 +171,7 @@ export default function Chatbot() {
           )}
         </AnimatePresence>
         <Button onClick={toggleChat} size="icon" className="w-16 h-16 rounded-full shadow-lg">
-          {isOpen ? <X className="h-8 w-8" /> : <Bot className="h-8 w-8" />}
+          {isOpen ? <X className="h-8 w-8" /> : <Bot className="h-8 w-8" />}\
         </Button>
       </div>
     </>
