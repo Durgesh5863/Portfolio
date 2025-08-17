@@ -32,7 +32,11 @@
     "@radix-ui/react-progress": "^1.1.2",
     "@radix-ui/react-radio-group": "^1.2.3",
     "@radix-ui/react-scroll-area": "^1.2.3",
-    "@radix-ui/react-select": "^2.1.6"
+    "@radix-ui/react-select": "^2.1.6",
+    "@types/next": "^8.0.7",
+    "next": "^15.4.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

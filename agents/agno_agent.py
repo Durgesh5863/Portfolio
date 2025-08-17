@@ -1,18 +1,18 @@
 from agno.app.agui.app import AGUIApp
 from agno.agent.agent import Agent
-from agno.models import OpenAIChat # Assuming you are using OpenAI, adjust if using Gemini with AGNO
+from agno.models.google import Gemini
 
 # Setup your Agno Agent, can be any Agno Agent
 agent = Agent(
     name="Agno Assistant",
-    model=OpenAIChat(id="gpt-4o"), # Replace with your Gemini model if AGNO supports it
+    model=Gemini(id="gemini-2.0-flash-lite"),
     instructions="You are a helpful AI assistant.",
 )
 
 # Setup the AG-UI app
 agui_app = AGUIApp(
     agent=agent,
-    name="AG-UI Agno Agent",
+    name="Durgesh Babu Personal Agent",
     app_id="agno_agent",
 )
 app = agui_app.get_app()
