@@ -7,6 +7,13 @@
   packages = [
     pkgs.nodejs_20
     pkgs.zulu
+    pkgs.python310
+    pkgs.python310Packages.fastapi
+    pkgs.python310Packages.uvicorn
+    pkgs.python310Packages.python-dotenv
+    pkgs.python310Packages.google-generativeai
+    pkgs.python310Packages.agno
+    pkgs.python310Packages.ag-ui-protocol
     pkgs.python311Packages.pip
   ];
   # Sets environment variables in the workspace
